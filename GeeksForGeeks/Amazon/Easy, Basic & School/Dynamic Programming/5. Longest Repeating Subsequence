@@ -1,0 +1,62 @@
+https://practice.geeksforgeeks.org/problems/longest-repeating-subsequence/0
+
+https://www.geeksforgeeks.org/longest-repeating-subsequence/
+
+//Same as longest common subsequence(string, same string), just i!=j is the added condition
+
+// Recursive 
+
+class Solution
+{
+    public int LongestRepeatingSubsequence(String text1, String text2, int l1, int l2){
+        if(l1 == 0 || l2 ==0){
+            return 0;
+        }
+        if(text1.charAt(l1-1) == text2.charAt(l2-1) && l1!=l2){
+            return 1+ LongestRepeatingSubsequence(text1, text2, l1-1, l2-1);
+        }
+        else
+            return Math.max(LongestRepeatingSubsequence(text1, text2, l1-1, l2), LongestRepeatingSubsequence(text1, text2, l1, l2-1));
+    }
+    
+     public int LongestRepeatingSubsequence(String text1) {
+            return LongestRepeatingSubsequence(text1, text1, text1.length(), text1.length());
+     }
+}
+
+===================================================================================================
+ 
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+ {
+	static int longestRepeatingSubsequence(String s, int n)
+    {
+        int[][] res= new int[n+1][n+1];
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                if(s.charAt(i-1)==s.charAt(j-1) && i!=j){
+                    res[i][j]=res[i-1][j-1]+1;
+                }
+                else{
+                    res[i][j]=Math.max(res[i][j-1], res[i-1][j]);
+                }
+            }
+        }
+        return res[n][n];
+    }
+	public static void main (String[] args)
+	 {
+	  Scanner sc=new Scanner(System.in);
+	    int n=sc.nextInt();
+	    for(int i=0;i<n;i++)
+	    {
+	        int len=sc.nextInt();
+	        String s=sc.next();
+	        System.out.println(longestRepeatingSubsequence(s, len));
+	    }
+	 }
+}

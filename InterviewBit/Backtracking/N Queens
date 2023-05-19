@@ -1,0 +1,177 @@
+https://www.interviewbit.com/problems/nqueens/
+
+/*
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+N Queens: Example 1
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+Each solution contains a distinct board configuration of the n-queens’ placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+For example,
+There exist two distinct solutions to the 4-queens puzzle:
+
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+*/
+
+public class Solution {
+    static ArrayList < ArrayList < String >> res = new ArrayList < ArrayList < String >> ();
+    public static void addSol(int[][] arr, int n) {
+        ArrayList < String > tempRes = new ArrayList < String > ();
+        for (int i = 0; i < n; i++) {
+            StringBuilder temp = new StringBuilder();;
+            for (int j = 0; j < n; j++) {
+                if (arr[i][j] == 1) {
+                    temp.append("Q");
+                } else {
+                    temp.append(".");
+                }
+            }
+            tempRes.add(temp.toString());
+        }
+        res.add(tempRes);
+    }
+
+    public static boolean isSafe(int[][] arr, int row, int col) {
+        int i, j;
+        for (i = 0; i < col; i++)
+            if (arr[row][i] == 1)
+                return false;
+        for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+            if (arr[i][j] == 1)
+                return false;
+        for (i = row, j = col; j >= 0 && i < arr.length; i++, j--)
+            if (arr[i][j] == 1)
+                return false;
+        return true;
+    }
+    public static boolean solveNQueens(int[][] arr, int col, int n) {
+        if (col == n) {
+            addSol(arr, n);
+            return true;
+        }
+        boolean r = false;
+        for (int i = 0; i < n; i++) {
+            if (isSafe(arr, i, col)) {
+                arr[i][col] = 1;
+                r = solveNQueens(arr, col + 1, n) || r;
+                arr[i][col] = 0;
+            }
+        }
+        return r;
+    }
+    public ArrayList < ArrayList < String >> solveNQueens(int a) {
+        int arr[][] = new int[a][a];
+        solveNQueens(arr, 0, a);
+        ArrayList < ArrayList < String >> m = new ArrayList < ArrayList < String >> (res);
+        res.clear();
+        return m;
+    }
+}
+
+================================================
+
+//space optimization
+
+public class Solution {
+
+
+    public void initializeTemp(ArrayList < String > temp, int a) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < a; i++) {
+            sb.append('.');
+        }
+        for (int i = 0; i < a; i++) {
+            temp.add(sb.toString());
+        }
+    }
+
+    public void updateTemp(int row, int col, int n, char c, ArrayList < String > temp) {
+        String s = temp.get(row);
+        s = s.substring(0, col) + c + s.substring(col + 1);
+        temp.set(row, s);
+    }
+
+    public boolean isSafe(int row, int column, int n, ArrayList < String > temp) {
+        //check row
+        for (int col = 0; col < n; col++) {
+            if (temp.get(row).charAt(col) == 'Q')
+                return false;
+        }
+
+        //check col
+        for (int r = 0; r < n; r++) {
+            if (temp.get(r).charAt(column) == 'Q')
+                return false;
+        }
+
+        //check diagonal
+        for (int r = row + 1, c = column + 1; r < n && c < n; r++, c++) {
+            if (temp.get(r).charAt(c) == 'Q') {
+                return false;
+            }
+        }
+
+        for (int r = row - 1, c = column - 1; r >= 0 && c >= 0; r--, c--) {
+            if (temp.get(r).charAt(c) == 'Q') {
+                return false;
+            }
+        }
+
+        for (int r = row - 1, c = column + 1; r >= 0 && c < n; r--, c++) {
+
+            if (temp.get(r).charAt(c) == 'Q') {
+
+                return false;
+
+            }
+
+        }
+
+        for (int r = row + 1, c = column - 1; r < n && c >= 0; r++, c--) {
+
+            if (temp.get(r).charAt(c) == 'Q') {
+
+                return false;
+
+            }
+
+        }
+
+
+
+        return true;
+    }
+    public void solveNQueens(int col, int n, ArrayList < String > temp, ArrayList < ArrayList < String >> res) {
+        if (col == n) {
+            res.add(new ArrayList < String > (temp));
+            return;
+        }
+        for (int row = 0; row < n; row++) {
+            if (isSafe(row, col, n, temp)) {
+                updateTemp(row, col, n, 'Q', temp);
+
+                solveNQueens(col + 1, n, temp, res);
+                updateTemp(row, col, n, '.', temp);
+            }
+
+        }
+    }
+
+    public ArrayList < ArrayList < String >> solveNQueens(int a) {
+        ArrayList < ArrayList < String >> res = new ArrayList < ArrayList < String >> ();
+        ArrayList < String > temp = new ArrayList < String > ();
+        initializeTemp(temp, a);
+        solveNQueens(0, a, temp, res);
+        return res;
+    }
+}

@@ -1,0 +1,68 @@
+https://www.youtube.com/watch?v=l0YC3876qxg&list=PLgUwDviBIf0rPG3Ictpu74YWBQ1CaBkm2&index=14
+
+/*
+Implement pow(x, n), which calculates x raised to the power n (xn).
+
+Example 1:
+Input: 2.00000, 10
+Output: 1024.00000
+
+Example 2:
+Input: 2.10000, 3
+Output: 9.26100
+
+Example 3:
+Input: 2.00000, -2
+Output: 0.25000
+Explanation: 2-2 = 1/22 = 1/4 = 0.25
+
+Note:
+-100.0 < x < 100.0
+n is a 32-bit signed integer, within the range [−231, 231 − 1]
+*/
+
+class Solution {
+    public double myPow(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        double power = myPow(x, n / 2);
+        if (n % 2 == 0) {
+            return power * power;
+        } else {
+            if (n > 0) {
+                return (x * power * power);
+            } else {
+                return (power * power) / x;
+            }
+        }
+    }
+}
+
+======================================================================================
+
+//Doesn't pass 1 test case
+
+Input: 2.00000
+-2147483648
+Output: 1.00000
+Expected: 0.00000
+
+class Solution {
+    public double myPow(double x, int n) {
+        double result = 1.0;
+        long nn = n<0?-1*n:n;
+        while(nn>0){
+          if(nn%2 ==1){
+            result =result*x;
+            nn--;
+          }
+          else{
+            x = x*x;
+            nn/=2;
+          }
+        }
+      return n<0? (double)1.0/result : result;
+      
+    }
+}

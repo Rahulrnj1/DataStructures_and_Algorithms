@@ -1,0 +1,284 @@
+/*
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+push(x) -- Push element x onto stack.
+pop() -- Removes the element on top of the stack.
+top() -- Get the top element.
+getMin() -- Retrieve the minimum element in the stack.
+ 
+
+Example:
+
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> Returns -3.
+minStack.pop();
+minStack.top();      --> Returns 0.
+minStack.getMin();   --> Returns -2.
+*/
+
+//two stacks
+
+class MinStack {
+  
+    Stack<Integer> st;
+    Stack<Integer> min;
+
+    public MinStack() {
+        st= new Stack<>();
+        min = new Stack<>();
+    }
+    
+    public void push(int val) {
+        st.push(val);
+       if(min.isEmpty() || min.peek()>val){
+         min.push(val);
+       }
+      else{
+        min.push(min.peek());
+      }
+    }
+    
+    public void pop() {
+        st.pop();
+        min.pop();
+    }
+    
+    public int top() {
+        return st.peek();
+    }
+    
+    public int getMin() {
+        return min.peek();
+    }
+}
+
+===========================================================
+
+//With one stack:
+Explanation: https://www.youtube.com/watch?v=V09NfaGf2ao&t=639s
+
+class MinStack {
+
+    Stack<Long>  st;
+    Long min;
+    public MinStack() {
+        st = new Stack<>();
+        min=Long.MAX_VALUE;
+    }
+    
+    public void push(int val) {
+      Long l = Long.valueOf(val);
+        if(st.isEmpty()){
+          st.push(l);
+          min = l;
+        }
+      else{
+        if(min> l){
+         long value =  2*l - min;
+          st.push(value);
+          min = l;
+        }
+        else{
+          st.push(l);
+        }
+      }
+    }
+    
+    public void pop() {
+        if(!st.isEmpty()){
+          if(st.peek()<min){
+            min = 2*min - st.peek();
+          }
+          st.pop();
+        }
+    }
+    
+    public int top() {
+        if(st.peek()< min){
+          return min.intValue();
+        }
+      return st.peek().intValue();
+    }
+    
+    public int getMin() {
+        return min.intValue();
+    }
+}
+
+======================================================================
+
+class MinStack {
+    /** initialize your data structure here. */
+    /** initialize your data structure here. */
+    List < Integer > li;
+    List < Integer > min;
+
+    public MinStack() {
+        li = new ArrayList < Integer > ();
+        min = new ArrayList < Integer > ();
+    }
+
+    public void push(int x) {
+        li.add(x);
+        if (min.isEmpty() || min.get(min.size() - 1) >= x) {
+            min.add(x);
+        }
+    }
+
+    public void pop() {
+        if ((int)(min.get(min.size() - 1)) == (int)(li.get(li.size() - 1))) {
+            min.remove(min.size() - 1);
+        }
+        li.remove(li.size() - 1);
+    }
+
+    public int top() {
+        return li.get(li.size() - 1);
+    }
+
+    public int getMin() {
+        return min.get(min.size() - 1);
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+ 
+ ==============================================================================
+
+//O(n) space
+
+class MinStack {
+
+ List < Integer > stack;
+ List < Integer > minList;
+ /** initialize your data structure here. */
+ public MinStack() {
+  stack = new ArrayList < Integer > ();
+  minList = new ArrayList < Integer > ();
+ }
+
+
+
+ public void push(int x) {
+  setMin(x);
+
+  stack.add(x);
+ }
+
+ public void pop() {
+  if (!stack.isEmpty()) {
+   minList.remove(minList.size() - 1);
+   stack.remove(stack.size() - 1);
+  }
+ }
+
+ public int top() {
+  if (stack.isEmpty()) {
+   return Integer.MIN_VALUE;
+  }
+
+  return stack.get(stack.size() - 1);
+ }
+
+ public int getMin() {
+  if (stack.isEmpty()) {
+   return Integer.MIN_VALUE;
+  }
+
+  return minList.get(minList.size() - 1);
+ }
+
+ private void setMin(int x) {
+
+  if (getMin() == Integer.MIN_VALUE) {
+   minList.add(x);
+   return;
+  }
+
+  if (getMin() < x) {
+   minList.add(getMin());
+  } else {
+   minList.add(x);
+  }
+ }
+}
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+
+
+//Better space complexity
+
+class MinStack {
+
+    List < Integer > stack;
+    List < Integer > minList;
+    /** initialize your data structure here. */
+    public MinStack() {
+        stack = new ArrayList < Integer > ();
+        minList = new ArrayList < Integer > ();
+    }
+
+    public void push(int x) {
+        stack.add(x);
+        if (stack.isEmpty()) {
+            minList.add(x);
+        } else {
+            int m = getMin();
+            if (x <= m) {
+                minList.add(x);
+            }
+        }
+    }
+
+    public void pop() {
+        if (!stack.isEmpty()) {
+            int top = top();
+            int m = getMin();
+            if (top == m) {
+                minList.remove(minList.size() - 1);
+            }
+            stack.remove(stack.size() - 1);
+        }
+    }
+
+    public int top() {
+        if (stack.isEmpty()) {
+            return Integer.MAX_VALUE;
+        }
+
+        return stack.get(stack.size() - 1);
+    }
+
+    public int getMin() {
+        if (minList.isEmpty()) {
+            return Integer.MAX_VALUE;
+        }
+
+        return minList.get(minList.size() - 1);
+    }
+
+}
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */

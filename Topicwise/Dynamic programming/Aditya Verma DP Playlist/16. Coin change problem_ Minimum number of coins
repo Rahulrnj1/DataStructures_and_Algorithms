@@ -1,0 +1,95 @@
+ https://practice.geeksforgeeks.org/problems/number-of-coins/0
+ 
+https://www.geeksforgeeks.org/find-minimum-number-of-coins-that-make-a-change/
+ 
+ Recursive:  https://www.youtube.com/watch?v=F28xN-S1SmI&t=297s
+ 
+ DP & clear understanding: https://www.youtube.com/watch?v=jgiZlGzXMBw
+ 
+ Aditya Verma: https://www.youtube.com/watch?v=I-l6PBeERuc&t=7s 
+ 
+ //Recursive:
+
+static int findMinNumberOfCoins(int[] arr, int k, int n) {
+        if (k == 0)
+            return 0;
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (k >= arr[i]) {
+                int subRes = findMinNumberOfCoins(arr, k - arr[i], n);
+
+                if (subRes != Integer.MAX_VALUE && subRes + 1 < res)
+                    res = subRes + 1;
+            }
+        }
+        return res;
+}
+
+========================================================================
+
+//Recursive: My version
+
+class Solution {
+    
+    private int coinChange(int[] coins, int n, int k){
+        if(k==0)
+            return 0;
+        
+        int res = Integer.MAX_VALUE;
+        for(int i=0;i<n;i++){
+            if(k>=coins[i]){
+                int subres1 = coinChange(coins, n, k-coins[i]);
+                int subres2 = coinChange(coins, n-1, k);
+                if(subres1!=Integer.MAX_VALUE && subres1+1<res)
+                    res = subres1+1;
+                 if(subres2!=Integer.MAX_VALUE && subres2+1<res)
+                    res = subres2+1;
+            }
+        }
+        return res;
+    }
+    public int coinChange(int[] coins, int amount) {
+        int ans = coinChange(coins, coins.length, amount);
+        return ans==Integer.MAX_VALUE? -1 : ans;
+    }
+}
+
+====================================================================
+
+ //Dynamic programming:
+ 
+ static int findMinNumberOfCoins(int[] arr, int k, int n) {
+     int[] dp = new int[k + 1];
+     Arrays.fill(dp, Integer.MAX_VALUE);
+     dp[0] = 0;
+     for (int i = 1; i <= k; i++) {
+         for (int j = 0; j < n; j++) {
+             if (i >= arr[j]) {
+                 if (dp[i - arr[j]] != Integer.MAX_VALUE)
+                     dp[i] = Math.min(dp[i - arr[j]] + 1, dp[i]);
+             }
+         }
+     }
+     return dp[k] == Integer.MAX_VALUE ? -1 : dp[k];
+ }
+ 
+ ================================================
+ 
+ 
+ //kinda same as above
+ 
+ class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=0;i<coins.length;i++){
+            for(int j=coins[i];j<=amount;j++){
+                if(dp[j-coins[i]]!=Integer.MAX_VALUE){
+                    dp[j] = Math.min(dp[j], dp[j-coins[i]]+1);
+                }
+            }
+        }
+        return dp[amount]==Integer.MAX_VALUE?-1:dp[amount];
+    }
+}

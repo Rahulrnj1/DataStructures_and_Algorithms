@@ -1,0 +1,76 @@
+/*
+Problem Statement:
+Implement an algorithm to find the kth to last element of a singly linked list.
+
+Both Iterative and Recursive implemention is available below
+*/
+
+package LinkedLists;
+
+public class ReturnKthToLast_2 {
+
+	static class Node {
+		public Node(int data) {
+			super();
+			this.data = data;
+			this.next = null;
+		}
+
+		int data;
+		Node next;
+	}
+
+	public static void main(String args[]) {
+		Node head = new Node(1);
+		head.next = new Node(5);
+		head.next.next = new Node(7);
+		head.next.next.next = new Node(2);
+		head.next.next.next.next = new Node(3);
+		head.next.next.next.next.next = new Node(4);
+		head.next.next.next.next.next.next = new Node(6);
+		head.next.next.next.next.next.next.next = new Node(2);
+		printList(head);
+		printKthToLastRecursive(head, 5);
+		printKthToLastRecursive(head, 11);
+		printKthToLastRecursive(head, 0);
+		printKthToLastRecursive(head, -1);
+		printKthToLastIteraive(head, 3);
+		printKthToLastIteraive(head, 7);
+		printKthToLastIteraive(head, 4);
+	}
+
+	private static void printKthToLastIteraive(Node head, int k) {
+		Node p1 = head;
+		Node p2 = head;
+		while (p1 != null && k > 0) {
+			p1 = p1.next;
+			k--;
+		}
+		while (p1 != null) {
+			p1 = p1.next;
+			p2 = p2.next;
+		}
+		System.out.println(p2.data);
+
+	}
+
+	private static int printKthToLastRecursive(Node head, int k) {
+		if (head == null) {
+			return 0;
+		}
+		int index = printKthToLastRecursive(head.next, k) + 1;
+		if (index == k) {
+			System.out.println(head.data);
+		}
+		return index;
+	}
+
+	private static void printList(Node head) {
+		Node node = head;
+		while (node != null) {
+			System.out.print(node.data + " ");
+			node = node.next;
+		}
+		System.out.println();
+	}
+}

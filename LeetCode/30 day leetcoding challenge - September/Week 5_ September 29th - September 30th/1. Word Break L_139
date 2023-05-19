@@ -1,0 +1,119 @@
+https://leetcode.com/problems/word-break/
+
+/*
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Example 2:
+
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+*/
+
+https://www.youtube.com/watch?v=Sx9NNgInc3A
+
+public class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        return wordBreakRecur(s, new HashSet<>(wordDict), 0);
+    }
+
+    private boolean wordBreakRecur(String s, Set<String> wordDict, int start) {
+        if (start == s.length()) {
+            return true;
+        }
+        for (int end = start + 1; end <= s.length(); end++) {
+            if (wordDict.contains(s.substring(start, end)) && wordBreakRecur(s, wordDict, end)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+=========================================================================
+
+public class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> wordDictSet = new HashSet<>(wordDict);
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[s.length()];
+        queue.add(0);
+        while (!queue.isEmpty()) {
+            int start = queue.remove();
+            if (visited[start]) {
+                continue;
+            }
+            for (int end = start + 1; end <= s.length(); end++) {
+                if (wordDictSet.contains(s.substring(start, end))) {
+                    queue.add(end);
+                    if (end == s.length()) {
+                        return true;
+                    }
+                }
+            }
+            visited[start] = true;
+        }
+        return false;
+    }
+}
+
+========================================================================
+
+class Solution {
+    
+    public boolean wordBreak(String s, List<String> wordDict) {
+        boolean[] dp = new boolean[s.length()+1];
+        dp[s.length()]=true;
+        
+        for(int i=s.length()-1;i>=0;i--){
+            for(String w : wordDict){
+                if(i+w.length() < dp.length && s.substring(i,i+w.length()).equals(w))
+                {
+                    dp[i]= dp[i+w.length()];
+                }
+                if(dp[i]==true){
+                    break;
+                }
+                
+            }
+        }
+        return dp[0];
+        
+    }
+}
+
+============================================================================================
+
+https://www.youtube.com/watch?v=hLQYQ4zj0qg
+
+class Solution {
+    Map < String, Boolean > m = new HashMap < > ();
+    public boolean wordBreak(String s, List < String > wordDict) {
+        if (s.equals(""))
+            return true;
+        if (m.containsKey(s))
+            return m.get(s);
+        for (int i = 1; i <= s.length(); i++) {
+            if (wordDict.contains(s.substring(0, i)) && wordBreak(s.substring(i), wordDict)) {
+                m.put(s, true);
+                return true;
+            }
+            m.put(s, false);
+        }
+        return false;
+    }
+}

@@ -1,0 +1,46 @@
+https://www.geeksforgeeks.org/cutting-a-rod-dp-13/
+
+https://www.youtube.com/watch?v=nqowUJzG-iM&list=PL_z_8CaSLPWekqhdCPmFohncHwz8TY2Go
+
+//Unbounded knapsack without weight array, but weight array is 1-N, so we will make use of n variable itself, compare with unbounded knapsack to understand better
+
+class Solution{
+    
+    private int cutRod(int[] price,int n,  int wt){
+        if(wt<=0)
+            return 0;
+            
+        if(n==0)
+            return 0;
+            
+        if(wt>=n)          
+        return Math.max(price[n-1]+cutRod(price, n,  wt-n), cutRod(price,n-1, wt));
+        else
+        return cutRod(price, n-1, wt);
+    }
+    
+    public int cutRod(int price[], int n) {
+        return cutRod(price, n , n);
+    }
+}
+
+==================================================
+
+//Unbounded knapsack dp, without weight array
+
+class Solution{
+    public int cutRod(int price[], int n) {
+        int[][] dp = new int[n+1][n+1];
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                if(j>=i){  //(not  i-1, because minimum cut length starts from 1, same for dp[i][j-i] in next line, no d̶p̶[̶i̶]̶[̶j̶-̶(̶i̶-̶1̶)̶]̶) 
+                    dp[i][j]= Math.max(dp[i-1][j], price[i-1]+dp[i][j-i]);
+                }
+                else{
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        return dp[n][n];
+    }
+}

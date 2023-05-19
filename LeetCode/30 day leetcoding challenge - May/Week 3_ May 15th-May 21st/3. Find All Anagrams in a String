@@ -1,0 +1,86 @@
+/*
+Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
+
+Strings consists of lowercase English letters only and the length of both strings s and p will not be larger than 20,100.
+
+The order of output does not matter.
+
+Example 1:
+
+Input:
+s: "cbaebabacd" p: "abc"
+
+Output:
+[0, 6]
+
+Explanation:
+The substring with start index = 0 is "cba", which is an anagram of "abc".
+The substring with start index = 6 is "bac", which is an anagram of "abc".
+Example 2:
+
+Input:
+s: "abab" p: "ab"
+
+Output:
+[0, 1, 2]
+
+Explanation:
+The substring with start index = 0 is "ab", which is an anagram of "ab".
+The substring with start index = 1 is "ba", which is an anagram of "ab".
+The substring with start index = 2 is "ab", which is an anagram of "ab".
+*/
+
+//Runtime Exception - Time limit exceeded for one input
+
+class Solution {
+    public List < Integer > findAnagrams(String s, String p) {
+        //result list
+        ArrayList < Integer > res = new ArrayList < Integer > ();
+        
+        //checking boundary case
+        if (p.length() > s.length())
+            return res;
+            
+        //storing unique characters in hashset
+        HashSet < Character > hs = new HashSet < Character > ();
+        char ch[] = p.toCharArray();
+        for (char c: ch) {
+            hs.add(c);
+        }
+        Arrays.sort(ch);
+        
+        //sorting p;
+        p = String.valueOf(ch);
+        int flag;
+        
+        for (int i = 0; i <= s.length() - p.length(); i++) {
+
+             //hs contains element then going forward
+            if (hs.contains(s.charAt(i))) {
+                flag = 0;
+                
+                //checking all next n elemets contains character of p or not
+                for (int j = i; j < i + p.length(); j++) {
+                    if (!hs.contains(s.charAt(j))) {
+                        i=j;
+                        flag = 1;
+                        break;
+                    }
+                }
+                
+                //if not, continue;
+                if (flag == 1)
+                    continue;
+                    
+                //sorting p length substring and checking
+                ch = (s.substring(i, i + p.length())).toCharArray();
+                Arrays.sort(ch);
+                if (p.equals(String.valueOf(ch))) {
+
+                    res.add(i);
+                }
+            }
+        }
+        return res;
+    }
+}

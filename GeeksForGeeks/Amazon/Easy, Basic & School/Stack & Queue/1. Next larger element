@@ -1,0 +1,64 @@
+https://practice.geeksforgeeks.org/problems/next-larger-element/0
+
+https://www.youtube.com/watch?v=NXOOYYwpbg4&list=PL_z_8CaSLPWdeOezg68SKkeLN4-T_jNHd&index=2
+
+
+=========================================================================
+
+class solve {
+    public static long[] nextLargerElement(long[] arr, int n) {
+        Stack < Long > st = new Stack < Long > ();
+        long[] res = new long[n];
+        for (int i = n - 1; i >= 0; i--) {
+            if (st.empty()) {
+                res[i] = -1;
+            } else {
+                while (!st.isEmpty() && st.peek() <= arr[i]) {
+                    st.pop();
+                }
+                res[i] = st.isEmpty() ? -1 : st.peek();
+            }
+            st.push(arr[i]);
+        }
+        return res;
+    }
+}
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static void printNextLargerNumber(int arr[]) {
+        HashMap < Integer, Integer > hm = new HashMap < Integer, Integer > ();
+        Stack < Integer > st = new Stack < Integer > ();
+        st.push(arr[0]);
+        for (int i = 1; i < arr.length; i++) {
+            while (!st.isEmpty() && st.peek() < arr[i]) {
+                hm.put(st.peek(), arr[i]);
+                st.pop();
+            }
+            st.push(arr[i]);
+        }
+        while (!st.isEmpty()) {
+            hm.put(st.pop(), -1);
+        }
+        for (int i: arr) {
+            System.out.print(hm.get(i) + " ");
+        }
+    }
+    public static void main(String[] args) {
+        Scanner kb = new Scanner(System.in);
+        int n = kb.nextInt();
+        for (int i = 0; i < n; i++) {
+            int size = kb.nextInt();
+            int arr[] = new int[size];
+            for (int j = 0; j < size; j++) {
+                arr[j] = kb.nextInt();
+            }
+            printNextLargerNumber(arr);
+            System.out.println();
+        }
+    }
+}

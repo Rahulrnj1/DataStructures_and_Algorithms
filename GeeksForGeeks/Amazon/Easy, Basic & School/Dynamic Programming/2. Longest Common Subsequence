@@ -1,0 +1,58 @@
+https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/
+
+https://practice.geeksforgeeks.org/problems/longest-common-subsequence/0
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+ {
+    static int longestCommonSubsequence(String A, String B, int a, int b)
+    {
+        int[][] lcs = new int[a+1][b+1];
+        for(int i=0;i<=a;i++)
+        {
+            for(int j=0;j<=b;j++)
+            {
+                if(i==0 || j==0)
+                {
+                    lcs[i][j]=0;
+                }
+                else if(A.charAt(i-1)==B.charAt(j-1))
+                {
+                    lcs[i][j]=lcs[i-1][j-1]+1;
+                }
+                else
+                {
+                    lcs[i][j]=Math.max(lcs[i-1][j], lcs[i][j-1]);
+                }
+            }
+        }
+         return lcs[a][b];
+    }
+	public static void main (String[] args)
+	 {
+	  Scanner sc=new Scanner(System.in);
+	    int n=sc.nextInt();
+	    for(int i=0;i<n;i++)
+	    {
+	        int a=sc.nextInt();
+	        int b=sc.nextInt();
+	        String A=sc.next();
+	        String B=sc.next();
+	        System.out.println(longestCommonSubsequence(A, B, a, b));
+	    }
+	 }
+}
+
+//Recursive
+
+int lcs( char[] X, char[] Y, int m, int n ) 
+  { 
+    if (m == 0 || n == 0) 
+      return 0; 
+    if (X[m-1] == Y[n-1]) 
+      return 1 + lcs(X, Y, m-1, n-1); 
+    else
+      return max(lcs(X, Y, m, n-1), lcs(X, Y, m-1, n)); 
+  } 

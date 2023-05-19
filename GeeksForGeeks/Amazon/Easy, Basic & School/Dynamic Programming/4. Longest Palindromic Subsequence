@@ -1,0 +1,200 @@
+Best :  https://www.youtube.com/watch?v=wuOOOATz_IA
+
+//Just do same as longest common subsequence between (string, reversed string) for both recursive and dp
+
+https://practice.geeksforgeeks.org/problems/longest-palindromic-subsequence/0
+
+https://www.geeksforgeeks.org/longest-palindromic-subsequence-dp-12/
+
+
+//Best Recursive
+
+class Solution {
+    
+     private String reverse(String text1){
+        StringBuilder s = new StringBuilder(text1);
+        s.reverse();
+        return s.toString();
+    }
+
+    public int longestPalindromeSubseq(String text1) {
+        String text2 = reverse(text1);
+        return longestPalindromeSubseq(text1, text2, text1.length(), text2.length());
+    }
+    
+     public int longestPalindromeSubseq(String text1, String text2, int l1, int l2){
+        if(l1 == 0 || l2 ==0){
+            return 0;
+        }
+        if(text1.charAt(l1-1) == text2.charAt(l2-1)){
+            return 1+ longestPalindromeSubseq(text1, text2, l1-1, l2-1);
+        }
+        else
+            return Math.max(longestPalindromeSubseq(text1, text2, l1-1, l2), longestPalindromeSubseq(text1, text2, l1, l2-1));
+    }
+  
+}
+
+=====================================================================================================================================
+
+DP:
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG {
+    public static String reverse(String s) {
+        return new String(new StringBuilder(s).reverse());
+    }
+    static int longestPalindromicSubsequence(String s1, int p) {
+        String s2 = reverse(s1);
+        int q = p;
+        int dp[][] = new int[p + 1][q + 1];
+        for (int i = 0; i <= p; i++) {
+            for (int j = 0; j <= q; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                } else if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[p][q];
+
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        for (int i = 0; i < n; i++) {
+            String s = sc.next();
+            System.out.println(longestPalindromicSubsequence(s, s.length()));
+        }
+    }
+}
+
+========================================================================================
+
+Recursive:
+
+Approach:
+
+// Every single character is a palindrome of length 1
+L(i, i) = 1 for all indexes i in given sequence
+
+// IF first and last characters are not same
+If (X[i] != X[j])  L(i, j) =  max{L(i + 1, j),L(i, j - 1)} 
+
+// If there are only 2 characters and both are same
+Else if (j == i + 1) L(i, j) = 2  
+
+// If there are more than two characters, and first and last 
+// characters are same
+Else L(i, j) =  L(i + 1, j - 1) + 2 
+
+static int lps(char seq[], int i, int j) { 
+    // Base Case 1: If there is only 1 character  
+        if (i == j) { 
+            return 1; 
+        } 
+  
+    // Base Case 2: If there are only 2 characters and both are same  
+        if (seq[i] == seq[j] && i + 1 == j) { 
+            return 2; 
+        } 
+  
+    // If the first and last characters match  
+        if (seq[i] == seq[j]) { 
+            return lps(seq, i + 1, j - 1) + 2; 
+        } 
+  
+    // If the first and last characters do not match  
+        return max(lps(seq, i, j - 1), lps(seq, i + 1, j)); 
+    } 
+    
+DP:
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG {
+    public static String reverse(String s) {
+        return new String(new StringBuilder(s).reverse());
+    }
+    static int longestPalindromicSubsequence(String s1, int p) {
+        String s2 = reverse(s1);
+        int q = p;
+        int dp[][] = new int[p + 1][q + 1];
+        for (int i = 0; i <= p; i++) {
+            for (int j = 0; j <= q; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                } else if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[p][q];
+
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        for (int i = 0; i < n; i++) {
+            String s = sc.next();
+            System.out.println(longestPalindromicSubsequence(s, s.length()));
+        }
+    }
+}
+
+    =================================================================
+
+//don't do this, unnecessarily complex
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+ {
+	static int longestPalindromicSubsequence(String s, int n)
+    {
+        int[][] res =  new int[n][n];
+        for(int i=0;i<n;i++)
+        {
+            res[i][i]=1;
+        }
+        for(int cl=2 ; cl<=n; cl++)
+        {
+            for(int i=0; i<n-cl+1; i++)
+            {
+                int j=i+cl-1;
+                if(s.charAt(i)==s.charAt(j) && cl==2)
+                {
+                    res[i][j]=2;
+                }
+                else if(s.charAt(i)==s.charAt(j))
+                {
+                    res[i][j]=res[i+1][j-1]+2;
+                }
+                else
+                {
+                     res[i][j]=Math.max(res[i][j-1], res[i+1][j]);
+                }
+            }
+        }
+        return res[0][n-1];
+    }
+	public static void main (String[] args)
+	 {
+	  Scanner sc=new Scanner(System.in);
+	    int n=sc.nextInt();
+	    for(int i=0;i<n;i++)
+	    {
+	        String s=sc.next();
+	        System.out.println(longestPalindromicSubsequence(s, s.length()));
+	    }
+	 }
+}
